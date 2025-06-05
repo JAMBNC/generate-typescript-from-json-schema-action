@@ -1,4 +1,4 @@
-const core = require("@actions/core");
+import core from "@actions/core";
 
 try {
   const baseUrl = "https://api.fastly.com";
