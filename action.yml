@@ -1,0 +1,24 @@
+name: "Update Fastly Dictionary"
+description: "Updates a fastly dictionary key item"
+inputs:
+  fastly_service_id:
+    description: "The fastly service id for your fastly account"
+    required: true
+  fastly_api_key:
+    description: "The fastly api key for your service id"
+    required: true
+  dictionary_name:
+    description: "The name of the dictionary to update"
+    required: true
+  dictionary_key:
+    description: "The dictionary key to update"
+    required: true
+  dictionary_value:
+    description: "The new value to set the key to"
+    required: true
+  purge_surrogate_key:
+    description: "A surrogate key to purge after updating the dictionary value"
+    required: false
+runs:
+  using: "node20"
+  main: "index.js"
