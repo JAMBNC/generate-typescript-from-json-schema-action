@@ -1,7 +1,8 @@
-# Fastly EDGE Dictionary key update action
+# Fastly Edge Dictionary key update action
 
 This github action will update the value of an Edge dictionary located within your Fastly service.
-It utilizes the Fastly API to update this value. This will always update the lastest version of the service.
+It utilizes the Fastly API to update this value. 
+This will always update the lastest version of the service.
 
 ## Inputs
 
@@ -15,19 +16,19 @@ It utilizes the Fastly API to update this value. This will always update the las
 
 ### `dictionary_name`
 
-**Required** The name of the edge dictionary that you want to update
+**Required**: The name of the edge dictionary that you want to update
 
 ### `dictionary_key`
 
-**Required** The key in the dictionary you want to update
+**Required**: The key in the dictionary you want to update
 
 ### `dictionary_value`
 
-**Required** The value to update the key to
+**Required**: The value to update the key to
 
 ### `purge_surrogate_key`
 
-**Optional** A surrogate key to purge after the dictionary value has been updated. If no key is provided, nothing will be purged.
+**Optional**: A surrogate key to purge after the dictionary value has been updated. If no key is provided, nothing will be purged.
 
 ## Outputs
 
