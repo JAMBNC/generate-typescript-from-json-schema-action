@@ -1,6 +1,7 @@
 import core from "@actions/core";
 import gh from "@actions/github"
 import fs from "node:fs";
+import exec from "@actions/exec"
 import { compileFromFile } from "json-schema-to-typescript";
 
 const generate = (dir) => {
