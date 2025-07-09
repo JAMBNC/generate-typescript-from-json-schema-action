@@ -2,17 +2,25 @@ import core from "@actions/core";
 import gh from "@actions/github"
 import fs from "node:fs";
 import exec from "@actions/exec"
-import { compileFromFile } from "json-schema-to-typescript";
+import { jsonSchemaToZod } from "json-schema-to-zod";
+import { resolveRefs } from "json-refs";
+import { format } from "prettier";
 
-const generate = (dir) => {
+const generate = async (dir) => {
   const files = fs.readdirSync(dir)
 
-  files.map(file => {
+  for (const file of files) {
     const name = file.split('.')[0];
-    compileFromFile(`${dir}/${file}`).then(ts => {
-      fs.writeFileSync(`${name}.d.ts`, ts)
+    const jsonSchema = JSON.parse(fs.readFileSync(`${dir}/${file}`, { encoding: 'utf8' }))
+    const { resolved } = await resolveRefs(jsonSchema);
+    const zodSchema = jsonSchemaToZod(resolved, {
+      name: name,
+      module: "esm",
+      type: true,
     })
-  })
+    const formatted = await format(code, { parser: "typescript" });
+    fs.writeFileSync(`${name}.ts`, zodSchema)
+  }
 }
 
 try {
@@ -30,7 +38,7 @@ try {
   process.chdir(typesDir);
 
   /* Generate the schemas */
-  generate(`../${schemaDir}`)
+  await generate(`../${schemaDir}`)
 
   await exec.exec('git', ['add', '.']);
   await exec.exec('git', ['commit', '-m', 'Schema type update']);
