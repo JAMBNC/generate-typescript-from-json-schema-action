@@ -1,34 +1,25 @@
-# Fastly Edge Dictionary key update action
+# JSON Schema Typescript generation package
 
-This github action will update the value of an Edge dictionary located within your Fastly service.
-It utilizes the Fastly API to update this value. 
-This will always update the lastest version of the service.
+This github acio
 
 ## Inputs
 
-### `fastly_service_id`
+### `schema_dir`
 
-**Required** The service id associated with your Fastly service.
+**Required** The directory of the current repo the base JSON Schema files are located at 
 
-### `fastly_api_key`
 
-**Required** The API key used to update your Fastly service edge dictionary. The API key must at least have [Engineer Permissions](https://www.fastly.com/documentation/guides/account-info/user-access-and-control/configuring-user-roles-and-permissions/)
+### `token`
 
-### `dictionary_name`
+**Required** A github token with access to the repo
 
-**Required**: The name of the edge dictionary that you want to update
+### `target_repo`
 
-### `dictionary_key`
+**Required** The repo to push the typescript types to
 
-**Required**: The key in the dictionary you want to update
+### `target_branch`
 
-### `dictionary_value`
-
-**Required**: The value to update the key to
-
-### `purge_surrogate_key`
-
-**Optional**: A surrogate key to purge after the dictionary value has been updated. If no key is provided, nothing will be purged.
+**Required** The target repo branch to push the typescript definitions to.
 
 ## Outputs
 
@@ -37,11 +28,10 @@ Nothing, basic logging is provided.
 ## Example usage
 
 ```yaml
-uses: fastly-update-dictionary-value-action
+uses: 'generate-typescript-from-json-schema'
 with:
-  fastly_service_id: <YOUR_FASTLY_SERVICE_ID>
-  fastly_api_key: <YOUR_FASTLY_API_KEY>
-  dictionary_name: url_map
-  dictionary_key: origin
-  dictionary_value: custom-origin
+  schema_dir: './src/my-schemas'
+  token: ${{ secrets.GITHUB_TOKEN }}
+  target_repo: 'JAMBNC/ts-types-jam'
+  target_branch: 'main'
 ```

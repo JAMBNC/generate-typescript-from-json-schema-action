@@ -1,23 +1,17 @@
-name: "Update Fastly Dictionary"
-description: "Updates a fastly dictionary key item"
+name: "Generate Zod bindings module"
+description: "generates a ESM module of Zod bindings"
 inputs:
-  fastly_service_id:
-    description: "The fastly service id for your fastly account"
+  schema_dir:
+    description: "The directory where the schema is located in this repo"
     required: true
-  fastly_api_key:
-    description: "The fastly api key for your service id"
+  token:
+    description: "The github token"
     required: true
-  dictionary_name:
-    description: "The name of the dictionary to update"
+  target_repo:
+    description: "The target repo for the build"
     required: true
-  dictionary_key:
-    description: "The dictionary key to update"
-    required: true
-  dictionary_value:
-    description: "The new value to set the key to"
-    required: true
-  purge_surrogate_key:
-    description: "A surrogate key to purge after updating the dictionary value"
+  target_branch:
+    description: "The target branch for the build"
     required: false
 runs:
   using: "node20"
