@@ -42,7 +42,7 @@ try {
 
   await exec.exec('git', ['add', '.']);
   await exec.exec('git', ['commit', '-m', 'Schema type update']);
-  await exec.exec('git', ['push', '-f', 'origin', `HEAD:${targetBranch}`, '|| true']);
+  await exec.exec(`(git push -f origin HEAD:${targetBranch}) || true`);
 
 } catch (error) {
   core.setFailed(error.message);
