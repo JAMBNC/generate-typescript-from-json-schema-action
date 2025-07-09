@@ -18,8 +18,8 @@ const generate = async (dir) => {
       module: "esm",
       type: true,
     })
-    const formatted = await format(code, { parser: "typescript" });
-    fs.writeFileSync(`${name}.ts`, zodSchema)
+    const formatted = await format(zodSchema, { parser: "typescript" });
+    fs.writeFileSync(`${name}.ts`, formatted)
   }
 }
 
