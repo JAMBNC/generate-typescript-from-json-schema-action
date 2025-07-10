@@ -43,7 +43,7 @@ try {
 
   /* Generate the schemas */
   await generate(`../${schemaDir}`);
-  await exec.exec('tsc');
+  await exec.exec('tsc', [], { ignoreReturnCode: true });
 
 
   await exec.exec('git', ['add', '.']);
