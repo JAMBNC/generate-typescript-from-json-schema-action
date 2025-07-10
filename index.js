@@ -24,6 +24,7 @@ const generate = async (dir) => {
     indexExport += `export * from './${name}';\n`
   }
   fs.writeFileSync('index.ts', indexExport)
+
 }
 
 try {
@@ -42,8 +43,14 @@ try {
   await exec.exec('npm', ['ci']);
 
   /* Generate the schemas */
-  await generate(`../${schemaDir}`);
+
+  fs.mkdirSync('schemas', { recursive: true })
+  process.chdir('./schemas');
+  await generate(`../../${schemaDir}`);
+  process.chdir('../');
+
   await exec.exec('tsc', [], { ignoreReturnCode: true });
+  await exec.exec('rm', ['-rf', 'schemas'])
 
 
   await exec.exec('git', ['add', '.']);
