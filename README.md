@@ -1,6 +1,6 @@
 # JSON Schema Typescript generation package
 
-This github acio
+This github action will generate zod+typescript bindings for a supplied repo.
 
 ## Inputs
 
