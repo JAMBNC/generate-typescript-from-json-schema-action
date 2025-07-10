@@ -24,7 +24,7 @@ const generate = async (dir) => {
     fs.writeFileSync(fileName, formatted)
     indexExport += `export * from './${fileName}';\n`
   }
-  fs.writeFileSync('index.js', indexExport)
+  fs.writeFileSync('index.ts', indexExport)
 }
 
 try {
