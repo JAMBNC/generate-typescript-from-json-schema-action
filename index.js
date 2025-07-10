@@ -42,7 +42,8 @@ try {
   process.chdir(typesDir);
 
   /* Generate the schemas */
-  await generate(`../${schemaDir}`)
+  await generate(`../${schemaDir}`);
+  await exec.exec('tsc');
 
 
   await exec.exec('git', ['add', '.']);
