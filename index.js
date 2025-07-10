@@ -12,7 +12,6 @@ const generate = async (dir) => {
 
   for (const file of files) {
     const name = file.split('.')[0];
-    const fileName = `${name}.ts`
     const jsonSchema = JSON.parse(fs.readFileSync(`${dir}/${file}`, { encoding: 'utf8' }))
     const { resolved } = await resolveRefs(jsonSchema);
     const zodSchema = jsonSchemaToZod(resolved, {
@@ -21,8 +20,8 @@ const generate = async (dir) => {
       type: true,
     })
     const formatted = await format(zodSchema, { parser: "typescript" });
-    fs.writeFileSync(fileName, formatted)
-    indexExport += `export * from './${fileName}';\n`
+    fs.writeFileSync(`${name}.ts`, formatted)
+    indexExport += `export * from './${name}';\n`
   }
   fs.writeFileSync('index.ts', indexExport)
 }
