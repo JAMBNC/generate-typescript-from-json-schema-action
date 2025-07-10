@@ -40,6 +40,7 @@ try {
   await exec.exec('git', ['config', '--global', 'user.name', '"JAM Types Builder"']);
   await exec.exec('git', ['clone', repoUrl, typesDir]);
   process.chdir(typesDir);
+  await exec.exec('npm', ['ci']);
 
   /* Generate the schemas */
   await generate(`../${schemaDir}`);

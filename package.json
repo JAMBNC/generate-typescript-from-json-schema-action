@@ -18,8 +18,5 @@
     "json-schema-to-typescript": "^15.0.4",
     "json-schema-to-zod": "^2.6.1",
     "prettier": "^3.6.2"
-  },
-  "devDependencies": {
-    "typescript": "^5.8.3"
   }
 }
