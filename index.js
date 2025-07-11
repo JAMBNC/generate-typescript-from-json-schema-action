@@ -1,6 +1,6 @@
 import core from "@actions/core";
-import gh from "@actions/github"
 import fs from "node:fs";
+import path from "node:path";
 import exec from "@actions/exec"
 import { jsonSchemaToZod } from "json-schema-to-zod";
 import { resolveRefs } from "json-refs";
