@@ -8,6 +8,7 @@ import { format } from "prettier";
 
 const generate = async (dir) => {
   let indexExport = '';
+  console.log(`dir: ${dir}`)
   const files = fs.readdirSync(dir)
 
   for (const file of files) {
