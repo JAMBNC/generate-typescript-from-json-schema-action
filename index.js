@@ -9,7 +9,7 @@ import { format } from "prettier";
 const generate = async (dir) => {
   let indexExport = '';
   console.log(`dir: ${dir}`)
-  const files = fs.readdirSync(dir)
+  const files = fs.readdirSync(dir, { recursive: true })
   console.log(`files: ${files}`)
 
   for (const file of files) {
