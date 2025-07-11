@@ -36,10 +36,11 @@ const generate = async (dir) => {
     let resolved = jsonSchema;
 
     try {
-      ({ resolved }) = await resolveRefs(jsonSchema, {
+      const result = await resolveRefs(jsonSchema, {
         includeInvalid: true,
         resolveCirculars: true
       });
+      resolved = result.resolved
     } catch (e) {
       console.log(`Issue with schema: ${e}`)
     }
