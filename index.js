@@ -33,10 +33,16 @@ const generate = async (dir) => {
     const name = parts[parts.length - 1].split('.')[0];
     console.log(`file: ${file}`)
     const jsonSchema = JSON.parse(fs.readFileSync(`${file}`, { encoding: 'utf8' }))
-    const { resolved } = await resolveRefs(jsonSchema, {
-      includeInvalid: true,
-      resolveCirculars: true
-    });
+    let resolved = jsonSchema;
+
+    try {
+      ({ resolved }) = await resolveRefs(jsonSchema, {
+        includeInvalid: true,
+        resolveCirculars: true
+      });
+    } catch (e) {
+      console.log(`Issue with schema: ${e}`)
+    }
 
     const zodSchema = jsonSchemaToZod(resolved, {
       name: name,
