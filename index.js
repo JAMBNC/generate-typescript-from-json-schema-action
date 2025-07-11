@@ -34,7 +34,8 @@ const generate = async (dir) => {
     console.log(`file: ${file}`)
     const jsonSchema = JSON.parse(fs.readFileSync(`${file}`, { encoding: 'utf8' }))
     const { resolved } = await resolveRefs(jsonSchema, {
-      resolveCirculars: true
+      includeInvalid: true,
+      resolveCirculars: false
     });
     const zodSchema = jsonSchemaToZod(resolved, {
       name: name,
