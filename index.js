@@ -6,10 +6,26 @@ import { jsonSchemaToZod } from "json-schema-to-zod";
 import { resolveRefs } from "json-refs";
 import { format } from "prettier";
 
+function getAllFiles(dirPath, files = []) {
+  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dirPath, entry.name);
+
+    if (entry.isDirectory()) {
+      getAllFiles(fullPath, files);
+    } else if (entry.isFile()) {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
+
 const generate = async (dir) => {
   let indexExport = '';
   console.log(`dir: ${dir}`)
-  const files = fs.readdirSync(dir, { recursive: true })
+  const files = getAllFiles(dir)
   console.log(`files: ${files}`)
 
   for (const file of files) {
