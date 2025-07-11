@@ -29,7 +29,8 @@ const generate = async (dir) => {
   console.log(`files: ${files}`)
 
   for (const file of files) {
-    const name = file.split('.')[0];
+    const parts = file.split('/');
+    const name = parts[parts.length - 1].split('.')[0];
     console.log(`file: ${file}`)
     const jsonSchema = JSON.parse(fs.readFileSync(`${file}`, { encoding: 'utf8' }))
     const { resolved } = await resolveRefs(jsonSchema);
