@@ -33,8 +33,10 @@ const generate = async (dir) => {
     const name = parts[parts.length - 1].split('.')[0];
     console.log(`file: ${file}`)
     const jsonSchema = JSON.parse(fs.readFileSync(`${file}`, { encoding: 'utf8' }))
-    //const { resolved } = await resolveRefs(jsonSchema);
-    const zodSchema = jsonSchemaToZod(jsonSchema, {
+    const { resolved } = await resolveRefs(jsonSchema, {
+      resolveCirculars: false
+    });
+    const zodSchema = jsonSchemaToZod(resolved, {
       name: name,
       module: "esm",
       type: true,
