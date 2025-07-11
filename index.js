@@ -10,9 +10,11 @@ const generate = async (dir) => {
   let indexExport = '';
   console.log(`dir: ${dir}`)
   const files = fs.readdirSync(dir)
+  console.log(`files: ${files}`)
 
   for (const file of files) {
     const name = file.split('.')[0];
+    console.log(`file: ${dir}/${file}`)
     const jsonSchema = JSON.parse(fs.readFileSync(`${dir}/${file}`, { encoding: 'utf8' }))
     const { resolved } = await resolveRefs(jsonSchema);
     const zodSchema = jsonSchemaToZod(resolved, {
