@@ -30,8 +30,8 @@ const generate = async (dir) => {
 
   for (const file of files) {
     const name = file.split('.')[0];
-    console.log(`file: ${dir}/${file}`)
-    const jsonSchema = JSON.parse(fs.readFileSync(`${dir}/${file}`, { encoding: 'utf8' }))
+    console.log(`file: ${file}`)
+    const jsonSchema = JSON.parse(fs.readFileSync(`${file}`, { encoding: 'utf8' }))
     const { resolved } = await resolveRefs(jsonSchema);
     const zodSchema = jsonSchemaToZod(resolved, {
       name: name,
