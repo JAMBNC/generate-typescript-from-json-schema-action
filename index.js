@@ -35,13 +35,15 @@ const generate = async (dir) => {
     const jsonSchema = JSON.parse(fs.readFileSync(`${file}`, { encoding: 'utf8' }))
     const { resolved } = await resolveRefs(jsonSchema, {
       includeInvalid: true,
-      resolveCirculars: false
+      resolveCirculars: true
     });
+
     const zodSchema = jsonSchemaToZod(resolved, {
       name: name,
       module: "esm",
       type: true,
     })
+
     const formatted = await format(zodSchema, { parser: "typescript" });
     fs.writeFileSync(`${name}.ts`, formatted)
     indexExport += `export * from './${name}';\n`
