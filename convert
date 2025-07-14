@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+import { generate } from './lib.js';
+import path from 'node:path'
+import fs from 'node:fs'
+
+const args = process.argv.slice(2);
+let schemasDir = null;
+let outputDir = null;
+
+for (let i = 0; i < args.length; i++) {
+  switch (args[i]) {
+    case '-s':
+      schemasDir = args[i + 1];
+      i++;
+      break;
+    case '-o':
+      outputDir = args[i + 1];
+      i++;
+      break;
+    default:
+      console.error(`Unknown argument: ${args[i]}`);
+      showHelp();
+      process.exit(1);
+  }
+}
+
+const showHelp = () => {
+  console.log(`
+Usage: node convert -s <schemas_folder> -o <output_directory>
+
+Arguments:
+  -s    Root schemas folder (required)
+  -o    Output directory (required)
+
+Example:
+  node convert -s ./schemas -o ./dist
+`);
+}
+
+// Validate arguments
+if (!schemasDir || !outputDir) {
+  console.error("Error: Missing required arguments.\n");
+  showHelp();
+  process.exit(1);
+}
+
+const schemaPath = (path.resolve(schemasDir));
+fs.mkdirSync(outputDir, { recursive: true })
+process.chdir(outputDir);
+generate(schemaPath)
