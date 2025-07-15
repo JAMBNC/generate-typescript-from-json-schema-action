@@ -12,7 +12,6 @@ try {
   await exec.exec('rm', ['-rf', typesDir])
   await exec.exec('rm', ['-rf', 'schemas'])
 
-
   const repoUrl = `https://x-access-token:${token}@github.com/${targetRepo}.git`;
   await exec.exec('git', ['config', '--global', 'user.email', '"devops@jamplus.com"']);
   await exec.exec('git', ['config', '--global', 'user.name', '"JAM Types Builder"']);
