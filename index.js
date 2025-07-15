@@ -20,6 +20,7 @@ try {
   /* Generate the schemas */
   await generate(`../${schemaDir}`, 'schemas');
 
+  await exec.exec('rm', ['-rf', 'dist'])
   await exec.exec('tsc', [], { ignoreReturnCode: true });
   await exec.exec('rm', ['-rf', 'schemas'])
 
