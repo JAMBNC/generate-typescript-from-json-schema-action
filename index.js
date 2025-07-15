@@ -9,6 +9,9 @@ try {
   const targetBranch = core.getInput('target_branch') || 'main';
   const schemaDir = core.getInput('schema_dir');
   const typesDir = 'types'
+  await exec.exec('rm', ['-rf', typesDir])
+  await exec.exec('rm', ['-rf', 'schemas'])
+
 
   const repoUrl = `https://x-access-token:${token}@github.com/${targetRepo}.git`;
   await exec.exec('git', ['config', '--global', 'user.email', '"devops@jamplus.com"']);
