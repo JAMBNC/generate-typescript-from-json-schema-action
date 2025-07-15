@@ -24,8 +24,9 @@ export const getAllFiles = (dirPath, files = []) => {
 export const generate = async (dir, outputDir) => {
   let indexExport = '';
 
-  const all = JSON.parse(fs.readFileSync(`${dir}/All.json`))
-  console.log('all: ', all)
+  const allFile = fs.readFileSync(`${dir}/All.json`)
+  console.log('allFile', allFile)
+  const all = JSON.parse(allFile)
 
   // Recursive stuff workaround until I fix the ref resolution
   if (all['$defs']?.LineItem?.properties?.children?.items) {
