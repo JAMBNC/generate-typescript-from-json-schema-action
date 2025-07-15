@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import exec from "@actions/exec"
-import { jsonSchemaToZod } from "./json-schema-to-zod/dist/esm/index.js";
+import { jsonSchemaToZod } from "./json-schema-zod/index.js";
 import { resolveRefs } from "json-refs";
 import { format } from "prettier";
 
