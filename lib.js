@@ -24,17 +24,8 @@ export const getAllFiles = (dirPath, files = []) => {
 export const generate = async (dir, outputDir) => {
   let indexExport = '';
 
-  console.log('dir', dir);
-  console.log(fs.readdirSync(dir))
   const allFile = fs.readFileSync(`${dir}/All.json`, { encoding: 'utf8' })
-  console.log('allFile', allFile)
   const all = JSON.parse(allFile)
-
-  // Recursive stuff workaround until I fix the ref resolution
-  if (all['$defs']?.LineItem?.properties?.children?.items) {
-    console.log('remove recursive LineItem reference')
-    delete all['$defs']?.LineItem?.properties?.children?.items
-  }
 
   const res = await resolveRefs(all)
 
@@ -45,7 +36,6 @@ export const generate = async (dir, outputDir) => {
 
   fs.mkdirSync(outputDir, { recursive: true })
   for (const [type, schema] of Object.entries(defs)) {
-    console.log('creating ', type)
 
     const parts = type.split('/');
     const name = (parts[parts.length - 1] ?? '').replace(/[^a-zA-Z0-9_$]/g, '');
