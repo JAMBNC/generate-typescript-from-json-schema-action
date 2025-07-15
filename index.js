@@ -13,7 +13,7 @@ try {
   const repoUrl = `https://x-access-token:${token}@github.com/${targetRepo}.git`;
   await exec.exec('git', ['config', '--global', 'user.email', '"devops@jamplus.com"']);
   await exec.exec('git', ['config', '--global', 'user.name', '"JAM Types Builder"']);
-  await exec.exec('git', ['clone', '--recursive', repoUrl, typesDir]);
+  await exec.exec('git', ['clone', repoUrl, typesDir]);
   process.chdir(typesDir);
   await exec.exec('npm', ['ci']);
 
