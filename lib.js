@@ -24,6 +24,8 @@ export const getAllFiles = (dirPath, files = []) => {
 export const generate = async (dir, outputDir) => {
   let indexExport = '';
 
+  console.log('dir', dir);
+  console.log(fs.readdirSync(dir))
   const allFile = fs.readFileSync(`${dir}/All.json`, { encoding: 'utf8' })
   console.log('allFile', allFile)
   const all = JSON.parse(allFile)
