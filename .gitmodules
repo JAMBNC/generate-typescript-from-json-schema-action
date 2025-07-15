@@ -1,0 +1,3 @@
+[submodule "json-schema-to-zod"]
+	path = json-schema-to-zod
+	url = git@github.com:austin-meier/json-schema-to-zod.git

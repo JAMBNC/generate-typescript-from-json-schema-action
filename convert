@@ -45,6 +45,4 @@ if (!schemasDir || !outputDir) {
 }
 
 const schemaPath = (path.resolve(schemasDir));
-fs.mkdirSync(outputDir, { recursive: true })
-process.chdir(outputDir);
-generate(schemaPath)
+generate(schemaPath, outputDir)

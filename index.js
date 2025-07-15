@@ -18,10 +18,7 @@ try {
   await exec.exec('npm', ['ci']);
 
   /* Generate the schemas */
-  fs.mkdirSync('schemas', { recursive: true })
-  process.chdir('./schemas');
-  await generate(`../../${schemaDir}`);
-  process.chdir('../');
+  await generate(`../${schemaDir}`, 'schemas');
 
   await exec.exec('tsc', [], { ignoreReturnCode: true });
   await exec.exec('rm', ['-rf', 'schemas'])
