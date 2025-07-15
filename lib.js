@@ -25,6 +25,7 @@ export const generate = async (dir, outputDir) => {
   let indexExport = '';
 
   const all = JSON.parse(fs.readFileSync(`${dir}/All.json`))
+  console.log('all: ', all)
   const res = await resolveRefs(all)
 
   const defs = Object.values(res.refs).reduce((defs, ref) => {
