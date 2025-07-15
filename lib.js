@@ -26,6 +26,13 @@ export const generate = async (dir, outputDir) => {
 
   const all = JSON.parse(fs.readFileSync(`${dir}/All.json`))
   console.log('all: ', all)
+
+  // Recursive stuff workaround until I fix the ref resolution
+  if (all['$defs']?.LineItem?.properties?.children?.items) {
+    console.log('remove recursive LineItem reference')
+    delete all['$defs']?.LineItem?.properties?.children?.items
+  }
+
   const res = await resolveRefs(all)
 
   const defs = Object.values(res.refs).reduce((defs, ref) => {
