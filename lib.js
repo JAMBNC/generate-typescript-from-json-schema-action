@@ -49,7 +49,7 @@ export const generate = async (dir, outputDir) => {
     const formatted = await format(zodSchema, { parser: "typescript" });
 
     fs.writeFileSync(`${outputDir}/${name}.ts`, formatted);
-    indexExport += `export * from './${name}.ts';\n`;
+    indexExport += `export * from './${name}.js';\n`;
   }
   fs.writeFileSync(`${outputDir}/index.ts`, indexExport);
 };
