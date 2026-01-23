@@ -4,15 +4,15 @@ import { jsonSchemaToZod } from "./json-schema-zod/index.js";
 import { resolveRefs } from "json-refs";
 import { format } from "prettier";
 
-export const getAllFiles = (dirPath, files = []) => {
+export const getAllSchemaFiles = (dirPath, files = []) => {
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
 
   for (const entry of entries) {
     const fullPath = path.join(dirPath, entry.name);
 
     if (entry.isDirectory()) {
-      getAllFiles(fullPath, files);
-    } else if (entry.isFile()) {
+      getAllSchemaFiles(fullPath, files);
+    } else if (entry.isFile() && entry.name.endsWith(".json")) {
       files.push(fullPath);
     }
   }
@@ -26,7 +26,7 @@ export const generate = async (dir, outputDir) => {
   const allFile = fs.readFileSync(`${dir}/All.json`, { encoding: "utf8" });
   const all = JSON.parse(allFile);
 
-  const manualSchemas = getAllFiles(`${dir}/manual`);
+  const manualSchemas = getAllSchemaFiles(`${dir}/manual`);
   manualSchemas.forEach((file) => {
     const schemaFile = fs.readFileSync(file, { encoding: "utf8" });
     const schema = JSON.parse(schemaFile);
@@ -35,13 +35,8 @@ export const generate = async (dir, outputDir) => {
 
   const res = await resolveRefs(all);
 
-  const defs = Object.values(res.refs).reduce((defs, ref) => {
-    defs[ref.uri] = ref.value;
-    return defs;
-  }, {});
-
   fs.mkdirSync(outputDir, { recursive: true });
-  for (const [type, schema] of Object.entries(defs)) {
+  for (const [type, schema] of Object.entries(res.resolved.$defs)) {
     const parts = type.split("/");
     const name = (parts[parts.length - 1] ?? "").replace(/[^a-zA-Z0-9_$]/g, "");
 
