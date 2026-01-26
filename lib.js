@@ -27,9 +27,10 @@ const buildLocalLookup = (schemas) => {
     if (schema["$id"]) {
       acc[schema["$id"]] = schema;
     } else {
-      // Default for the time being
+      /* Default root levels to have an $id of themselves if they don't provide one */
       const fileName = path.basename(file);
-      acc[`https://jamplus.com/schemas/${fileName}`] = schema;
+      const uri = `https://jamplus.com/schemas/${fileName}`;
+      acc[uri] = schema;
     }
     return acc;
   }, {});
@@ -69,11 +70,17 @@ export const generate = async (dir, outputDir) => {
       const schemaFile = fs.readFileSync(file, { encoding: "utf8" });
       const schema = JSON.parse(schemaFile);
       const fileName = path.basename(file, ".json");
+
+      /* Hoist all schema definitions because we want all definitions available for type narrowing */
       if (schema["$defs"]) {
         Object.assign(acc["$defs"], schema["$defs"]);
         delete schema["$defs"];
       }
-      acc["$defs"][fileName] = schema;
+
+      /* Only hoist the root schema to defs if it isn't referencing another def schema already */
+      if (!schema["$ref"] && !acc["$defs"][fileName]) {
+        acc["$defs"][fileName] = schema;
+      }
       return acc;
     },
     {
