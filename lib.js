@@ -20,20 +20,72 @@ export const getAllSchemaFiles = (dirPath, files = []) => {
   return files;
 };
 
+const buildLocalLookup = (schemas) => {
+  return schemas.reduce((acc, file) => {
+    const schemaFile = fs.readFileSync(file, { encoding: "utf8" });
+    const schema = JSON.parse(schemaFile);
+    if (schema["$id"]) {
+      acc[schema["$id"]] = schema;
+    } else {
+      // Default for the time being
+      const fileName = path.basename(file);
+      acc[`https://jamplus.com/schemas/${fileName}`] = schema;
+    }
+    return acc;
+  }, {});
+};
+
+/* This gets called before the ref resolver. It's job is to keep a local cache of the ids
+   so that we can avoid needing to fetch the schema from the network, helpful for things like
+   local development or if the schema isn't hosted yet */
+const localPreResolver = (lookup, obj, path) => {
+  if (obj && obj["$ref"] && typeof obj["$ref"] === "string") {
+    const ref = obj["$ref"];
+    if (ref.startsWith("http")) {
+      const parts = ref.split("#");
+      const uri = parts[0];
+      const fragment = parts[1] || "";
+
+      if (lookup[uri]) {
+        //console.log("Resolving local reference for URI:", uri);
+        const def = lookup[uri];
+        def.$ref = fragment ? `#${fragment}` : "#";
+        return def;
+      }
+    }
+  }
+  return obj;
+};
+
 export const generate = async (dir, outputDir) => {
   let indexExport = "";
 
-  const allFile = fs.readFileSync(`${dir}/All.json`, { encoding: "utf8" });
-  const all = JSON.parse(allFile);
+  const schemas = getAllSchemaFiles(`${dir}`);
+  const localResolverLookup = buildLocalLookup(schemas);
 
-  const manualSchemas = getAllSchemaFiles(`${dir}/manual`);
-  manualSchemas.forEach((file) => {
-    const schemaFile = fs.readFileSync(file, { encoding: "utf8" });
-    const schema = JSON.parse(schemaFile);
-    Object.assign(all["$defs"], schema["$defs"]);
+  /* I wan't all definitions as types for narrowing. So this just merges them together*/
+  const all = schemas.reduce(
+    (acc, file) => {
+      const schemaFile = fs.readFileSync(file, { encoding: "utf8" });
+      const schema = JSON.parse(schemaFile);
+      const fileName = path.basename(file, ".json");
+      if (schema["$defs"]) {
+        Object.assign(acc["$defs"], schema["$defs"]);
+        delete schema["$defs"];
+      }
+      acc["$defs"][fileName] = schema;
+      return acc;
+    },
+    {
+      $schema: "https://json-schema.org/draft/2020-12/schema",
+      $defs: {},
+    },
+  );
+
+  const res = await resolveRefs(all, {
+    refPreProcessor: (obj, path) =>
+      localPreResolver(localResolverLookup, obj, path),
   });
-
-  const res = await resolveRefs(all);
 
   fs.mkdirSync(outputDir, { recursive: true });
   for (const [type, schema] of Object.entries(res.resolved.$defs)) {
