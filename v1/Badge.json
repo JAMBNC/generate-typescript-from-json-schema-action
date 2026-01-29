@@ -1,0 +1,47 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "BadgeImage" : {
+      "type" : "object",
+      "properties" : {
+        "context" : {
+          "$ref" : "#/$defs/Context"
+        },
+        "position" : {
+          "$ref" : "#/$defs/BadgePosition"
+        },
+        "url" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "context", "position", "url" ]
+    },
+    "BadgePosition" : {
+      "type" : "string",
+      "enum" : [ "topRight", "bottomRight", "bottomLeft", "topLeft" ]
+    },
+    "Context" : {
+      "type" : "string",
+      "enum" : [ "product_detail", "product_listing" ]
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "code" : {
+      "type" : "string"
+    },
+    "images" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/$defs/BadgeImage"
+      }
+    },
+    "priority" : {
+      "type" : "integer"
+    },
+    "title" : {
+      "type" : "string"
+    }
+  },
+  "required" : [ "code" ]
+}

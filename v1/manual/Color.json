@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jamplus.com/schemas/Color.json",
+  "title": "Color Schema",
+  "description": "Schema definitions for colors used throughout our system",
+  "$ref": "#/$defs/Color",
+
+  "$defs": {
+    "Process": {
+      "title": "Process",
+      "description": "Defines how visual content is transferred to the medium.",
+      "type": "string",
+      "enum": [
+        "offset",
+        "digital",
+        "foil",
+        "emboss",
+        "screen",
+        "inkjet",
+        "flexography",
+        "sublimation",
+        "thermal"
+      ]
+    },
+
+    "ColorValue": {
+      "title": "Color Value",
+      "description": "The numeric value of a color, dependent on the color model/color space.",
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 3,
+      "maxItems": 4,
+      "examples": [
+        [255, 128, 0],
+        [0, 100, 100, 0],
+        [53.23, 80.11, 67.22]
+      ]
+    },
+
+    "ColorSpaceName": {
+      "title": "Color Space Name",
+      "description": "Known color space names.",
+      "type": "string",
+      "enum": [
+        "sRGB",
+        "Adobe RGB",
+        "Display P3",
+        "ProPhoto RGB",
+        "US Web Coated SWOP v2",
+        "Coated FOGRA39",
+        "Japan Color 2001 Coated",
+        "PMS",
+        "CIELAB"
+      ]
+    },
+
+    "Color": {
+      "title": "Color",
+      "description": "A standalone color object that serves as a way to represent a visual impression on a medium.",
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "format": "uuid",
+          "description": "A unique UUID identifier for the color."
+        },
+        "name": {
+          "type": "string",
+          "description": "The normalized name for a color, used for spot name in spot applications."
+        },
+        "representations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/ColorSpaceName"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/ColorValue"
+          },
+          "minProperties": 1,
+          "description": "Color representations keyed by color space name."
+        }
+      },
+      "required": ["uuid", "name", "representations"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "Breadcrumb" : {
+      "type" : "object",
+      "properties" : {
+        "label" : {
+          "type" : "string"
+        },
+        "url" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "label" ]
+    },
+    "CategoryReference" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer"
+        },
+        "label" : {
+          "type" : "string"
+        },
+        "url" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "id", "label", "url" ]
+    },
+    "Media" : {
+      "type" : "object",
+      "properties" : {
+        "altText" : {
+          "type" : "string"
+        },
+        "label" : {
+          "type" : "string"
+        },
+        "mediaType" : {
+          "$ref" : "#/$defs/MediaType"
+        },
+        "previewUrl" : {
+          "type" : "string"
+        },
+        "tags" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/$defs/Tag"
+          }
+        },
+        "url" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "mediaType", "url" ]
+    },
+    "MediaType" : {
+      "type" : "string",
+      "enum" : [ "image", "video" ]
+    },
+    "NonNegativeIntRange" : {
+      "type" : "object",
+      "properties" : {
+        "max" : {
+          "type" : "integer",
+          "minimum" : 0
+        },
+        "min" : {
+          "type" : "integer",
+          "minimum" : 0
+        }
+      },
+      "required" : [ "min" ]
+    },
+    "ProductContent" : {
+      "type" : "object",
+      "properties" : {
+        "breadcrumbs" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/$defs/Breadcrumb"
+          }
+        },
+        "longDescription" : {
+          "type" : "string"
+        },
+        "metaDescription" : {
+          "type" : "string"
+        },
+        "metaKeywords" : {
+          "type" : "string"
+        },
+        "metaTitle" : {
+          "type" : "string"
+        },
+        "seoDescription" : {
+          "type" : "string"
+        },
+        "shortDescription" : {
+          "type" : "string"
+        },
+        "shortName" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ProductCustomization" : {
+      "type" : "object",
+      "properties" : {
+        "prebuiltConfigurationId" : {
+          "type" : "string"
+        },
+        "prebuiltCustomizable" : {
+          "type" : "boolean"
+        },
+        "prebuiltDesign" : {
+          "type" : "boolean"
+        },
+        "stockType" : {
+          "type" : "string"
+        },
+        "styleType" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ProductUrl" : {
+      "type" : "object",
+      "properties" : {
+        "metaData" : {
+          "$ref" : "#/$defs/ProductUrlMetaData"
+        },
+        "url" : {
+          "type" : "string"
+        },
+        "urlType" : {
+          "$ref" : "#/$defs/ProductUrlType"
+        }
+      }
+    },
+    "ProductUrlMetaData" : {
+      "type" : "object",
+      "properties" : {
+        "creativeEngine" : {
+          "$ref" : "#/$defs/ProductUrlMetaDataCreativeEngine"
+        },
+        "designer" : {
+          "$ref" : "#/$defs/ProductUrlMetaDataDesigner"
+        }
+      }
+    },
+    "ProductUrlMetaDataCreativeEngine" : {
+      "type" : "string",
+      "enum" : [ "chili", "alchemy" ]
+    },
+    "ProductUrlMetaDataDesigner" : {
+      "type" : "string",
+      "enum" : [ "chili", "luma", "addrLogo" ]
+    },
+    "ProductUrlType" : {
+      "type" : "string",
+      "enum" : [ "product", "customProduct", "yourLogoHere" ]
+    },
+    "PurchaseOptions" : {
+      "type" : "object",
+      "properties" : {
+        "allowsSample" : {
+          "type" : "boolean"
+        },
+        "customLeadTimeDayRange" : {
+          "$ref" : "#/$defs/NonNegativeIntRange"
+        },
+        "customizable" : {
+          "type" : "boolean"
+        },
+        "designRequired" : {
+          "type" : "boolean"
+        },
+        "inStock" : {
+          "type" : "boolean"
+        },
+        "isReturnable" : {
+          "type" : "boolean"
+        },
+        "maxPrice" : {
+          "type" : "number"
+        },
+        "minCustomizationQty" : {
+          "type" : "integer",
+          "exclusiveMinimum" : 0
+        },
+        "minPrice" : {
+          "type" : "number"
+        },
+        "minSaleQty" : {
+          "type" : "integer",
+          "exclusiveMinimum" : 0
+        },
+        "onSale" : {
+          "type" : "boolean"
+        },
+        "plainLeadTimeDayRange" : {
+          "$ref" : "#/$defs/NonNegativeIntRange"
+        },
+        "pricePercentOff" : {
+          "type" : "number"
+        },
+        "quantityStepIncrements" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/$defs/QuantityStepIncrement"
+          }
+        },
+        "stockQty" : {
+          "type" : "integer",
+          "minimum" : 0
+        },
+        "suggestedQuantityDisplays" : {
+          "type" : "array",
+          "items" : {
+            "type" : "integer"
+          }
+        },
+        "tierPrices" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/$defs/TierPrice"
+          }
+        },
+        "toBeDiscontinued" : {
+          "type" : "boolean"
+        }
+      },
+      "required" : [ "allowsSample", "customizable", "designRequired", "inStock", "isReturnable", "maxPrice", "minPrice", "stockQty", "tierPrices", "toBeDiscontinued" ]
+    },
+    "QuantityStepIncrement" : {
+      "type" : "object",
+      "properties" : {
+        "requiredStepIncrement" : {
+          "type" : "integer"
+        },
+        "startingAtQty" : {
+          "type" : "integer"
+        }
+      },
+      "required" : [ "requiredStepIncrement", "startingAtQty" ]
+    },
+    "Tag" : {
+      "type" : "string",
+      "enum" : [ "primary", "small", "thumbnail", "yourLogoHere", "insideView", "swatch", "amazon", "carousel", "other" ]
+    },
+    "Taxonomy" : {
+      "type" : "object",
+      "properties" : {
+        "master" : {
+          "type" : "string"
+        },
+        "primary" : {
+          "type" : "string"
+        },
+        "sub" : {
+          "type" : "string"
+        }
+      }
+    },
+    "TierPrice" : {
+      "type" : "object",
+      "properties" : {
+        "discountReason" : {
+          "type" : "string"
+        },
+        "price" : {
+          "type" : "number"
+        },
+        "pricePercentOff" : {
+          "type" : "number"
+        },
+        "salePrice" : {
+          "type" : "number"
+        },
+        "startingAtQty" : {
+          "type" : "integer"
+        }
+      },
+      "required" : [ "price", "startingAtQty" ]
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "badges" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "brand" : {
+      "type" : "string"
+    },
+    "browsable" : {
+      "type" : "boolean"
+    },
+    "content" : {
+      "$ref" : "#/$defs/ProductContent"
+    },
+    "createdAt" : {
+      "type" : "string",
+      "format" : "date-time"
+    },
+    "customization" : {
+      "$ref" : "#/$defs/ProductCustomization"
+    },
+    "displayGroup" : {
+      "type" : "string"
+    },
+    "identifiers" : {
+      "type" : "object"
+    },
+    "media" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/$defs/Media"
+      }
+    },
+    "name" : {
+      "type" : "string"
+    },
+    "primaryCategory" : {
+      "$ref" : "#/$defs/CategoryReference"
+    },
+    "purchaseOptions" : {
+      "$ref" : "#/$defs/PurchaseOptions"
+    },
+    "searchable" : {
+      "type" : "boolean"
+    },
+    "sku" : {
+      "type" : "string"
+    },
+    "specs" : {
+      "type" : "object"
+    },
+    "status" : {
+      "type" : "string"
+    },
+    "taxonomy" : {
+      "$ref" : "#/$defs/Taxonomy"
+    },
+    "upc" : {
+      "type" : "string"
+    },
+    "updatedAt" : {
+      "type" : "string",
+      "format" : "date-time"
+    },
+    "url" : {
+      "minItems" : 1,
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/$defs/ProductUrl"
+      }
+    }
+  },
+  "required" : [ "browsable", "name", "searchable", "sku", "specs", "taxonomy", "url" ]
+}

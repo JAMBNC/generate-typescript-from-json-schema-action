@@ -1,0 +1,40 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "properties" : {
+    "city" : {
+      "type" : "string"
+    },
+    "company" : {
+      "type" : "string"
+    },
+    "country" : {
+      "type" : "string"
+    },
+    "firstName" : {
+      "type" : "string"
+    },
+    "identifiers" : {
+      "type" : "object"
+    },
+    "lastName" : {
+      "type" : "string"
+    },
+    "phone" : {
+      "type" : "string"
+    },
+    "postal" : {
+      "type" : "string"
+    },
+    "region" : {
+      "type" : "string"
+    },
+    "streets" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    }
+  },
+  "required" : [ "city", "streets" ]
+}

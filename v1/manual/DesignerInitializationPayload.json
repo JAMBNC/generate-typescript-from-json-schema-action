@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jamplus.com/schemas/DesignerInitializationPayload.json",
+  "description": "The required initialization data for the Hermes designer.",
+  "$ref": "#/$defs/DesignerInitializationPayload",
+  "$defs": {
+    "DesignerSaveEndpoints": {
+      "type": "object",
+      "properties": {
+        "save": {
+          "type": "string",
+          "format": "uri",
+          "description": "The endpoint URL for saving the designer data"
+        }
+      },
+      "required": ["save"]
+    },
+    "DesignerImageEndpoints": {
+      "type": "object",
+      "properties": {
+        "gallery": {
+          "type": "string",
+          "format": "uri",
+          "description": "The endpoint URL for fetching the users image gallery. (uses the DesignerAuth.endpointAuth)"
+        },
+        "upload": {
+          "type": "string",
+          "format": "uri",
+          "description": "The endpoint URL for uploading a user image (uses the DesignerAuth.endpointAuth)"
+        },
+        "delete": {
+          "type": "string",
+          "format": "uri",
+          "description": "The endpoint URL for removing an image from the gallery. (uses the DesignerAuth.endpointAuth)"
+        },
+        "rendition": {
+          "type": "string",
+          "format": "uri",
+          "description": "The endpoint URL for fetching a rendition of an image from the gallery. (uses the DesignerAuth.endpointAuth)"
+        }
+      }
+    },
+    "DesignerFontEndpoints": {
+      "type": "object",
+      "properties": {
+        "all": {
+          "type": "string",
+          "format": "uri",
+          "description": "The (optional) endpoint URL for retrieving all supported fonts"
+        },
+        "get": {
+          "type": "string",
+          "format": "uri",
+          "description": "The endpoint URL for retrieving a font file by uuid "
+        }
+      },
+      "required": ["get"]
+    },
+    "DesignerEndpoints": {
+      "type": "object",
+      "properties": {
+        "design": { "$ref": "#/$defs/DesignerSaveEndpoints" },
+        "image": { "$ref": "#/$defs/DesignerImageEndpoints" },
+        "fonts": { "$ref": "#/$defs/DesignerFontEndpoints" }
+      },
+      "required": ["design"]
+    },
+    "DesignerAuth": {
+      "type": "object",
+      "properties": {
+        "chiliAuth": {
+          "type": "string",
+          "description": "The authorization token for CHILI requests"
+        },
+        "endpointAuth": {
+          "type": "string",
+          "description": "The authorization token for designer endpoint requests"
+        }
+      }
+    },
+    "DesignerPricing": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "A product sku"
+      },
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "https://jamplus.com/schemas/Product.json#/$defs/TierPrice"
+        }
+      },
+      "minProperties": 1,
+      "description": "Price tiers keyed by product SKU."
+    },
+    "DesignerInitializationPayload": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "oneOf": [
+            { "type": "object" },
+            { "type": "string", "format": "uri" }
+          ],
+          "description": "The designer configuration schema or URI endpoint that returns a designer configuration schema"
+        },
+        "product": {
+          "oneOf": [
+            { "$ref": "https://jamplus.com/schemas/Product.json#" },
+            { "type": "string", "format": "uri" }
+          ],
+          "description": "A Product schema or URI endpoint that returns a Product schema"
+        },
+        "endpoints": {
+          "$ref": "#/$defs/DesignerEndpoints"
+        },
+        "auth": {
+          "$ref": "#/$defs/DesignerAuth"
+        },
+        "pricing": {
+          "oneOf": [
+            { "$ref": "#/$defs/DesignerPricing" },
+            { "type": "string", "format": "uri" }
+          ],
+          "description": "A DesignerPricing schema or URI endpoint that returns a DesignerPricing schema"
+        },
+        "uiLabels": {
+          "oneOf": [
+            {
+              "$ref": "https://jamplus.com/schemas/UiLabels.json#/$defs/DesignerUiLabels"
+            },
+            { "type": "string", "format": "uri" }
+          ],
+          "description": "The UI Label schema used to configure the labels on the designer (optional)"
+        },
+        "fonts": {
+          "type": "array",
+          "items": {
+            "$ref": "https://jamplus.com/schemas/Fonts.json#/$defs/DesignerFont"
+          },
+          "description": "An (optional) array of DesignerFont schemas used to configure the fonts available in the designer. If this property is not provided, then the endpoints.fonts.all endpoint will be used to fetch the fonts."
+        }
+      },
+      "required": ["product", "config", "auth", "endpoints"]
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jamplus.com/schemas/VendorColor.json",
+  "title": "Color System Schema",
+  "description": "Schema definitions for printing color systems including processes, color spaces, colors, and palettes.",
+  "$ref": "#/$defs/VendorColor",
+
+  "$defs": {
+    "VendorColor": {
+      "title": "Vendor Color",
+      "description": "Defines vendor support for a color, including supported processes and pricing groups.",
+      "type": "object",
+      "properties": {
+        "colorId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "The uuid for the color the vendor supports."
+        },
+        "vendorName": {
+          "type": "string",
+          "description": "The string name of the vendor."
+        },
+        "vendorColorName": {
+          "type": "string",
+          "description": "A vendor specific name used to refer to the color"
+        },
+        "processes": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "https://jamplus.com/schemas/Color.json#/$defs/Process"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "pricingGroup": {
+                "type": "string"
+              },
+              "vendorColorName": {
+                "type": "string",
+                "description": "A vendor process specific name used to refer to the color"
+              }
+            },
+            "required": ["pricingGroup"]
+          },
+          "description": "Pricing group names keyed by supported process."
+        }
+      },
+      "required": ["vendorName", "colorId", "processes"],
+      "additionalProperties": false
+    }
+  }
+}

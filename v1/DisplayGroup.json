@@ -1,0 +1,139 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "AttributeRenderPreference" : {
+      "type" : "string",
+      "enum" : [ "tabs", "dropdown", "swatches", "modal" ]
+    },
+    "Pivot" : {
+      "type" : "object",
+      "properties" : {
+        "attributeRenderPreference" : {
+          "$ref" : "#/$defs/AttributeRenderPreference"
+        },
+        "code" : {
+          "type" : "string"
+        },
+        "helpText" : {
+          "type" : "string"
+        },
+        "label" : {
+          "type" : "string"
+        },
+        "pivotType" : {
+          "$ref" : "#/$defs/PivotType"
+        },
+        "values" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/$defs/PivotValue"
+          }
+        }
+      },
+      "required" : [ "code", "values" ]
+    },
+    "PivotType" : {
+      "type" : "string",
+      "enum" : [ "primary", "secondary" ]
+    },
+    "PivotValue" : {
+      "type" : "object",
+      "properties" : {
+        "helpText" : {
+          "type" : "string"
+        },
+        "label" : {
+          "type" : "string"
+        },
+        "products" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "swatchType" : {
+          "$ref" : "#/$defs/SwatchType"
+        },
+        "swatchValue" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "label", "products" ]
+    },
+    "ProductListing" : {
+      "type" : "object",
+      "properties" : {
+        "isCustomizable" : {
+          "type" : "boolean"
+        },
+        "mainImageUrl" : {
+          "type" : "string"
+        },
+        "pivotValues" : {
+          "type" : "object"
+        },
+        "shortName" : {
+          "type" : "string"
+        },
+        "sku" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "isCustomizable", "sku" ]
+    },
+    "ShoutOut" : {
+      "type" : "object",
+      "properties" : {
+        "display" : {
+          "type" : "string"
+        },
+        "type" : {
+          "$ref" : "#/$defs/ShoutOutType"
+        },
+        "url" : {
+          "type" : "string"
+        },
+        "value" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "display", "type", "url" ]
+    },
+    "ShoutOutType" : {
+      "type" : "string",
+      "enum" : [ "generic", "product", "category", "group", "similar" ]
+    },
+    "SwatchType" : {
+      "type" : "string",
+      "enum" : [ "TEXT", "IMAGE", "RGB" ]
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "type" : "string"
+    },
+    "identifiers" : {
+      "type" : "object"
+    },
+    "pivots" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/$defs/Pivot"
+      }
+    },
+    "products" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/$defs/ProductListing"
+      }
+    },
+    "shoutOuts" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/$defs/ShoutOut"
+      }
+    }
+  },
+  "required" : [ "id", "pivots", "products" ]
+}

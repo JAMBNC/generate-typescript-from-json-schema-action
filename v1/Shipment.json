@@ -1,0 +1,104 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "LineItem" : {
+      "type" : "object",
+      "properties" : {
+        "children" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/$defs/LineItem"
+          }
+        },
+        "discountAmount" : {
+          "type" : "number",
+          "minimum" : 0
+        },
+        "identifiers" : {
+          "type" : "object"
+        },
+        "imageUrls" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "productIdentifiers" : {
+          "type" : "object"
+        },
+        "quantity" : {
+          "type" : "number",
+          "exclusiveMinimum" : 0
+        },
+        "sku" : {
+          "type" : "string"
+        },
+        "subtotal" : {
+          "type" : "number",
+          "minimum" : 0
+        },
+        "taxAmount" : {
+          "type" : "number",
+          "minimum" : 0
+        },
+        "total" : {
+          "type" : "number",
+          "minimum" : 0
+        },
+        "weightInPounds" : {
+          "type" : "number",
+          "minimum" : 0
+        }
+      },
+      "required" : [ "name", "quantity", "sku", "subtotal", "taxAmount", "total", "weightInPounds" ]
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "carrier" : {
+      "type" : "string"
+    },
+    "comments" : {
+      "type" : "string"
+    },
+    "currencyCode" : {
+      "type" : "string"
+    },
+    "estimatedDeliveryDate" : {
+      "type" : "string",
+      "format" : "date-time"
+    },
+    "identifiers" : {
+      "type" : "object"
+    },
+    "lineItems" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/$defs/LineItem"
+      }
+    },
+    "orderIdentifiers" : {
+      "type" : "object"
+    },
+    "orderNumber" : {
+      "type" : "string",
+      "description" : "Globally unique orderNumber.  Usually a combination of sales channel and order number",
+      "minLength" : 1,
+      "maxLength" : 50
+    },
+    "shipmentDate" : {
+      "type" : "string",
+      "format" : "date-time"
+    },
+    "trackingNumber" : {
+      "type" : "string"
+    },
+    "trackingUrl" : {
+      "type" : "string"
+    }
+  },
+  "required" : [ "orderNumber", "shipmentDate" ]
+}

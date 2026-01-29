@@ -1,0 +1,55 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "AttributeRenderPreference" : {
+      "type" : "string",
+      "enum" : [ "tabs", "dropdown", "swatches", "modal" ]
+    },
+    "PredefinedAttributeValue" : {
+      "type" : "object",
+      "properties" : {
+        "identifiers" : {
+          "type" : "object"
+        },
+        "swatches" : {
+          "type" : "object"
+        },
+        "value" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "identifiers", "value" ]
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "code" : {
+      "type" : "string"
+    },
+    "displayForCustomer" : {
+      "type" : "boolean"
+    },
+    "identifiers" : {
+      "type" : "object"
+    },
+    "label" : {
+      "type" : "string"
+    },
+    "predefinedValues" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/$defs/PredefinedAttributeValue"
+      }
+    },
+    "renderPreference" : {
+      "$ref" : "#/$defs/AttributeRenderPreference"
+    },
+    "secondarySelectionEnabled" : {
+      "type" : "boolean"
+    },
+    "usedForProductSelection" : {
+      "type" : "boolean"
+    }
+  },
+  "required" : [ "code", "displayForCustomer", "label", "renderPreference", "secondarySelectionEnabled", "usedForProductSelection" ]
+}
