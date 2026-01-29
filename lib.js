@@ -103,6 +103,7 @@ export const generate = async (dir, outputDir) => {
       name: name,
       module: "esm",
       type: true,
+      withJsdocs: true
     });
 
     const formatted = await format(zodSchema, { parser: "typescript" });
