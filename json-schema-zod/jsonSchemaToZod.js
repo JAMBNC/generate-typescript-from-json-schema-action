@@ -27,7 +27,7 @@ ${result}`;
         result = `${jsdocs}export ${name ? `const ${name} =` : `default`} ${result}
 `;
         if (!noImport) {
-            result = `import { z } from "zod/v4"
+            result = `import { z } from "zod"
 
 ${result}`;
         }

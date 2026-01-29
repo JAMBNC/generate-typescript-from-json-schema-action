@@ -66,16 +66,16 @@ export function parseObject(objectSchema, refs) {
         }
         else {
             if (additionalProperties) {
-                patternProperties += `z.record(z.string(), z.union([${[
+                patternProperties += `z.record(z.union([${[
                     ...Object.values(parsedPatternProperties),
                     additionalProperties,
                 ].join(", ")}]))`;
             }
             else if (Object.keys(parsedPatternProperties).length > 1) {
-                patternProperties += `z.record(z.string(), z.union([${Object.values(parsedPatternProperties).join(", ")}]))`;
+                patternProperties += `z.record(z.union([${Object.values(parsedPatternProperties).join(", ")}]))`;
             }
             else {
-                patternProperties += `z.record(z.string(), ${Object.values(parsedPatternProperties)})`;
+                patternProperties += `z.record(${Object.values(parsedPatternProperties)})`;
             }
         }
         patternProperties += ".superRefine((value, ctx) => {\n";
@@ -142,8 +142,8 @@ export function parseObject(objectSchema, refs) {
         : patternProperties
             ? patternProperties
             : additionalProperties
-                ? `z.record(z.string(), ${additionalProperties})`
-                : "z.record(z.string(), z.any())";
+                ? `z.record(${additionalProperties})`
+                : "z.record(z.any())";
     if (its.an.anyOf(objectSchema)) {
         output += `.and(${parseAnyOf({
             ...objectSchema,
