@@ -40,10 +40,13 @@ const localPreResolver = (lookup, obj, path) => {
     if (ref.startsWith("http")) {
       const parts = ref.split("#");
       const uri = parts[0];
+      const fragment = parts[1];
 
       if (lookup[uri]) {
-        //console.log("Resolving local reference for URI:", uri);
-        const def = lookup[uri];
+        const def = { ...lookup[uri] };
+        if (fragment) {
+          def.$ref = "#" + fragment;
+        }
         return def;
       }
     }
