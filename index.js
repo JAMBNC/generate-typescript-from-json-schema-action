@@ -1,5 +1,4 @@
 import core from "@actions/core";
-import fs from "node:fs";
 import exec from "@actions/exec";
 import { generate } from "./lib.js";
 

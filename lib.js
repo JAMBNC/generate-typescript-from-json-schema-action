@@ -26,11 +26,6 @@ const buildLocalLookup = (schemas) => {
     const schema = JSON.parse(schemaFile);
     if (schema["$id"]) {
       acc[schema["$id"]] = schema;
-    } else {
-      /* Default root levels to have an $id of themselves if they don't provide one */
-      const fileName = path.basename(file);
-      const uri = `https://jamplus.com/schemas/${fileName}`;
-      acc[uri] = schema;
     }
     return acc;
   }, {});
@@ -45,12 +40,10 @@ const localPreResolver = (lookup, obj, path) => {
     if (ref.startsWith("http")) {
       const parts = ref.split("#");
       const uri = parts[0];
-      const fragment = parts[1] || "";
 
       if (lookup[uri]) {
         //console.log("Resolving local reference for URI:", uri);
         const def = lookup[uri];
-        def.$ref = fragment ? `#${fragment}` : "#";
         return def;
       }
     }
@@ -73,7 +66,11 @@ export const generate = async (dir, outputDir) => {
 
       /* Hoist all schema definitions because we want all definitions available for type narrowing */
       if (schema["$defs"]) {
-        Object.assign(acc["$defs"], schema["$defs"]);
+        Object.entries(schema["$defs"]).forEach(([def, schema]) => {
+          if (!acc["$defs"][def] && !schema["$ref"]) {
+            acc["$defs"][def] = schema;
+          }
+        });
         delete schema["$defs"];
       }
 
@@ -89,6 +86,8 @@ export const generate = async (dir, outputDir) => {
     },
   );
 
+  console.log(all);
+
   const res = await resolveRefs(all, {
     refPreProcessor: (obj, path) =>
       localPreResolver(localResolverLookup, obj, path),
@@ -103,7 +102,7 @@ export const generate = async (dir, outputDir) => {
       name: name,
       module: "esm",
       type: true,
-      withJsdocs: true
+      withJsdocs: true,
     });
 
     const formatted = await format(zodSchema, { parser: "typescript" });
