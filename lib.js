@@ -86,8 +86,6 @@ export const generate = async (dir, outputDir) => {
     },
   );
 
-  console.log(all);
-
   const res = await resolveRefs(all, {
     refPreProcessor: (obj, path) =>
       localPreResolver(localResolverLookup, obj, path),

@@ -138,7 +138,7 @@ export function parseObject(objectSchema, refs) {
                 ? additionalProperties === "z.never()"
                     ? properties + ".strict()"
                     : properties + `.catchall(${additionalProperties})`
-                : properties
+                : properties + ".passthrough()"
         : patternProperties
             ? patternProperties
             : additionalProperties
