@@ -72,18 +72,17 @@ export function parseObject(objectSchema, refs) {
             }
         }
         else {
-            const recordKey = propertyNamesSchema ? `${propertyNamesSchema}, ` : "";
             if (additionalProperties) {
-                patternProperties += `z.record(${recordKey}z.union([${[
+                patternProperties += `z.record(z.union([${[
                     ...Object.values(parsedPatternProperties),
                     additionalProperties,
                 ].join(", ")}]))`;
             }
             else if (Object.keys(parsedPatternProperties).length > 1) {
-                patternProperties += `z.record(${recordKey}z.union([${Object.values(parsedPatternProperties).join(", ")}]))`;
+                patternProperties += `z.record(z.union([${Object.values(parsedPatternProperties).join(", ")}]))`;
             }
             else {
-                patternProperties += `z.record(${recordKey}${Object.values(parsedPatternProperties)})`;
+                patternProperties += `z.record(${Object.values(parsedPatternProperties)})`;
             }
         }
         patternProperties += ".superRefine((value, ctx) => {\n";
@@ -139,6 +138,12 @@ export function parseObject(objectSchema, refs) {
         patternProperties += "}\n";
         patternProperties += "})";
     }
+    const propertyNamesEnum = !properties && !patternProperties &&
+        objectSchema.propertyNames &&
+        Array.isArray(objectSchema.propertyNames.enum) &&
+        objectSchema.propertyNames.enum.every((x) => typeof x === "string")
+        ? objectSchema.propertyNames.enum
+        : null;
     let output = properties
         ? patternProperties
             ? properties + patternProperties
@@ -149,14 +154,14 @@ export function parseObject(objectSchema, refs) {
                 : properties + ".passthrough()"
         : patternProperties
             ? patternProperties
-            : additionalProperties
-                ? propertyNamesSchema
-                    ? `z.record(${propertyNamesSchema}, ${additionalProperties})`
-                    : `z.record(${additionalProperties})`
-                : propertyNamesSchema
-                    ? `z.record(${propertyNamesSchema}, z.any())`
+            : propertyNamesEnum
+                ? "z.object({ " + propertyNamesEnum.map((key) =>
+                    `${JSON.stringify(key)}: ${additionalProperties || "z.any()"}`)
+                    .join(", ") + " }).partial()"
+                : additionalProperties
+                    ? `z.record(${additionalProperties})`
                     : "z.record(z.any())";
-    if (properties && propertyNamesSchema) {
+    if (propertyNamesSchema && !propertyNamesEnum && !patternProperties) {
         output += ".superRefine((value, ctx) => {\n";
         output += "for (const key in value) {\n";
         output += "const result = " + propertyNamesSchema + ".safeParse(key)\n";
