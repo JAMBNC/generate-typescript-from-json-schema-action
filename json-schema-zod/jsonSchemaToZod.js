@@ -4,11 +4,13 @@ export const jsonSchemaToZod = (schema, { module, name, type, noImport, ...rest 
     if (type && (!name || module !== "esm")) {
         throw new Error("Option `type` requires `name` to be set and `module` to be `esm`");
     }
+    const referencedTypes = new Set();
     let result = parseSchema(schema, {
         module,
         name,
         path: [],
         seen: new Map(),
+        referencedTypes,
         ...rest,
     });
     const jsdocs = rest.withJsdocs && typeof schema !== "boolean" && schema.description
@@ -27,8 +29,11 @@ ${result}`;
         result = `${jsdocs}export ${name ? `const ${name} =` : `default`} ${result}
 `;
         if (!noImport) {
-            result = `import { z } from "zod"
-
+            let refImports = "";
+            for (const refType of [...referencedTypes].sort()) {
+                refImports += `import { ${refType} } from './${refType}.js'\n`;
+            }
+            result = `import { z } from "zod"\n${refImports}
 ${result}`;
         }
     }

@@ -27,6 +27,14 @@ export const parseSchema = (
       return custom;
     }
   }
+  if (refs.refMap) {
+    const pathStr = refs.path.join("/");
+    const refTarget = refs.refMap[pathStr];
+    if (refTarget) {
+      if (refs.referencedTypes) refs.referencedTypes.add(refTarget);
+      return refTarget;
+    }
+  }
   let seen = refs.seen.get(schema);
   if (seen) {
     if (seen.r !== undefined) {

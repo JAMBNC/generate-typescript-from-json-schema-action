@@ -94,6 +94,26 @@ export const generate = async (dir, outputDir) => {
       localPreResolver(localResolverLookup, obj, path),
   });
 
+  /* Build a per-definition ref map from res.refs so that referenced
+     definitions can be imported by name instead of inlined */
+  const defRefMaps = {};
+  const knownDefs = new Set(Object.keys(res.resolved.$defs));
+  for (const [pointer, refInfo] of Object.entries(res.refs)) {
+    if (refInfo.circular) continue;
+    const match = pointer.match(/^#\/\$defs\/([^/]+)\/(.*)/);
+    if (!match) continue;
+    const defName = match[1];
+    const relativePath = match[2];
+    const uri = refInfo.uri || "";
+    const targetMatch = uri.match(/\$defs\/([^/]+)$/);
+    if (!targetMatch) continue;
+    const targetName = targetMatch[1];
+    if (targetName === defName) continue;
+    if (!knownDefs.has(targetName)) continue;
+    if (!defRefMaps[defName]) defRefMaps[defName] = {};
+    defRefMaps[defName][relativePath] = targetName.replace(/[^a-zA-Z0-9_$]/g, "");
+  }
+
   fs.mkdirSync(outputDir, { recursive: true });
   for (const [type, schema] of Object.entries(res.resolved.$defs)) {
     const parts = type.split("/");
@@ -104,6 +124,7 @@ export const generate = async (dir, outputDir) => {
       module: "esm",
       type: true,
       withJsdocs: true,
+      refMap: defRefMaps[type] || {},
     });
 
     const formatted = await format(zodSchema, { parser: "typescript" });
