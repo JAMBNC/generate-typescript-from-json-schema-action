@@ -121,7 +121,12 @@ const selectParser = (schema, refs) => {
 };
 export const its = {
   an: {
-    object: (x) => x.type === "object",
+    object: (x) =>
+      x.type === "object" ||
+      (!x.type &&
+        (x.properties !== undefined ||
+          x.additionalProperties !== undefined ||
+          x.patternProperties !== undefined)),
     array: (x) => x.type === "array",
     anyOf: (x) => x.anyOf !== undefined,
     allOf: (x) => x.allOf !== undefined,
