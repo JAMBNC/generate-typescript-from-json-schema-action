@@ -150,7 +150,27 @@ export function parseObject(objectSchema, refs) {
             : additionalProperties
                 ? additionalProperties === "z.never()"
                     ? properties + ".strict()"
-                    : properties + `.catchall(${additionalProperties})`
+                    : (() => {
+                        const definedKeys = JSON.stringify(Object.keys(objectSchema.properties || {}));
+                        return properties + `.passthrough().superRefine((value, ctx) => {
+const defined_keys = new Set(${definedKeys});
+for (const key in value) {
+if (!defined_keys.has(key)) {
+const result = ${additionalProperties}.safeParse(value[key])
+if (!result.success) {
+ctx.addIssue({
+  path: [...ctx.path, key],
+  code: 'custom',
+  message: \`Invalid input: must match additionalProperties schema\`,
+  params: {
+    issues: result.error.issues
+  }
+})
+}
+}
+}
+})`;
+                    })()
                 : properties + ".passthrough()"
         : patternProperties
             ? patternProperties
