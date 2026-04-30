@@ -15,7 +15,7 @@ export const parseString = (schema) => {
             case "uri":
                 return [".url(", ")"];
             case "uuid":
-                return [".uuid(", ")"];
+                return ['.regex(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/', ")"];
             case "date-time":
                 return [".datetime({ offset: true", ", message: ", " })"];
             case "time":
