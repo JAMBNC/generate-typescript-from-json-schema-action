@@ -124,6 +124,7 @@ export const generate = async (dir, outputDir) => {
       module: "esm",
       type: true,
       withJsdocs: true,
+      explicitTyping: true,
       refMap: defRefMaps[type] || {},
     });
 

@@ -1,8 +1,11 @@
 import { parseSchema } from "./parsers/parseSchema.js";
 import { expandJsdocs } from "./utils/jsdocs.js";
-export const jsonSchemaToZod = (schema, { module, name, type, noImport, ...rest } = {}) => {
+export const jsonSchemaToZod = (schema, { module, name, type, noImport, explicitTyping, ...rest } = {}) => {
     if (type && (!name || module !== "esm")) {
         throw new Error("Option `type` requires `name` to be set and `module` to be `esm`");
+    }
+    if (explicitTyping && (!name || module !== "esm")) {
+        throw new Error("Option `explicitTyping` requires `name` to be set and `module` to be `esm`");
     }
     const referencedTypes = new Set();
     let result = parseSchema(schema, {
@@ -26,7 +29,13 @@ ${result}`;
         }
     }
     else if (module === "esm") {
-        result = `${jsdocs}export ${name ? `const ${name} =` : `default`} ${result}
+        result = explicitTyping
+            ? `const _${name} = ${result}
+type _${name}Schema = typeof _${name}
+export interface ${name}Schema extends _${name}Schema {}
+${jsdocs}export const ${name}: ${name}Schema = _${name}
+`
+            : `${jsdocs}export ${name ? `const ${name} =` : `default`} ${result}
 `;
         if (!noImport) {
             let refImports = "";

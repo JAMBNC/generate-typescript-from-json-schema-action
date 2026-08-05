@@ -44,6 +44,10 @@ const params = {
         shorthand: "wj",
         description: "Generate jsdocs off of the description property.",
     },
+    explicitTyping: {
+        shorthand: "et",
+        description: "Annotate the schema export with a named interface so declaration emit references it instead of inlining it.",
+    },
 };
 async function main() {
     const args = parseArgs(params, process.argv, true);
@@ -56,6 +60,7 @@ async function main() {
         noImport: args.noImport,
         type: args.type,
         withJsdocs: args.withJsdocs,
+        explicitTyping: args.explicitTyping,
     });
     if (args.output) {
         mkdirSync(dirname(args.output), { recursive: true });
