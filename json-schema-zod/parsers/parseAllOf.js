@@ -30,7 +30,12 @@ export function parseAllOf(schema, refs) {
     }
     else {
         const [left, right] = half(ensureOriginalIndex(schema.allOf));
-        return `z.intersection(${parseAllOf({ allOf: left }, refs)}, ${parseAllOf({
+        /* `.merge()` rather than `z.intersection()`: a merge of object schemas is itself a
+           ZodObject, which keeps the result usable as a `z.discriminatedUnion` member (the
+           discriminator stays a top-level key). `z.intersection` produces a ZodIntersection,
+           which discriminatedUnion rejects. This assumes allOf composes objects — the only way
+           it's used in these schemas (a base ingredient plus a type-specific shape). */
+        return `${parseAllOf({ allOf: left }, refs)}.merge(${parseAllOf({
             allOf: right,
         }, refs)})`;
     }

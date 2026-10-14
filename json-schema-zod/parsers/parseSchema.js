@@ -153,7 +153,8 @@ export const its = {
         return false;
       }
       const discriminatorProp = x.discriminator;
-      return x.oneOf.every((schema) => {
+      // Does this object schema carry the discriminator as a required const/single-enum?
+      const carriesDiscriminator = (schema) => {
         if (
           !schema ||
           typeof schema !== "object" ||
@@ -178,6 +179,14 @@ export const its = {
           Array.isArray(schema.required) &&
           schema.required.includes(discriminatorProp)
         );
+      };
+      // A member carries the discriminator itself, or in one of its allOf branches
+      // (a shared base composed with a type-specific shape). The allOf still emits a
+      // ZodObject via `parseAllOf`, so it stays a valid discriminatedUnion member.
+      return x.oneOf.every((member) => {
+        if (!member || typeof member !== "object") return false;
+        const branches = Array.isArray(member.allOf) ? member.allOf : [member];
+        return branches.some(carriesDiscriminator);
       });
     },
     oneOf: (x) => x.oneOf !== undefined,
