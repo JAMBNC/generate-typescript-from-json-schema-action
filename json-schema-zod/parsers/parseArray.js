@@ -21,11 +21,8 @@ export const parseArray = (schema, refs) => {
         ")",
     ]);
     if (schema.uniqueItems === true) {
-        r += withMessage(schema, "uniqueItems", () => [
-            ".unique(",
-            "",
-            ")",
-        ]);
+        const message = JSON.stringify(schema.errorMessage?.uniqueItems ?? "Array items must be unique");
+        r += `.refine((items) => new Set(items.map((item) => JSON.stringify(item))).size === items.length, ${message})`;
     }
     return r;
 };
