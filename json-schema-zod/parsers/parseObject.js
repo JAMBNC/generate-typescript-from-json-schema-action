@@ -109,7 +109,7 @@ export function parseObject(objectSchema, refs) {
                     ".safeParse(value[key])\n";
             patternProperties += "if (!result.success) {\n";
             patternProperties += `ctx.addIssue({
-          path: [...ctx.path, key],
+          path: [key],
           code: 'custom',
           message: \`Invalid input: Key matching regex /\${key}/ must match schema\`,
           params: {
@@ -125,7 +125,7 @@ export function parseObject(objectSchema, refs) {
                 "const result = " + additionalProperties + ".safeParse(value[key])\n";
             patternProperties += "if (!result.success) {\n";
             patternProperties += `ctx.addIssue({
-          path: [...ctx.path, key],
+          path: [key],
           code: 'custom',
           message: \`Invalid input: must match catchall schema\`,
           params: {
@@ -159,7 +159,7 @@ if (!defined_keys.has(key)) {
 const result = ${additionalProperties}.safeParse(value[key])
 if (!result.success) {
 ctx.addIssue({
-  path: [...ctx.path, key],
+  path: [key],
   code: 'custom',
   message: \`Invalid input: must match additionalProperties schema\`,
   params: {
@@ -187,7 +187,7 @@ ctx.addIssue({
         output += "const result = " + propertyNamesSchema + ".safeParse(key)\n";
         output += "if (!result.success) {\n";
         output += `ctx.addIssue({
-  path: [...ctx.path, key],
+  path: [key],
   code: 'custom',
   message: \`Invalid property name: \${key}\`,
   params: {

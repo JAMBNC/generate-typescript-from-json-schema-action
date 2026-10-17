@@ -31,7 +31,7 @@ try {
   await generate(`../${schemaDir}`, "schemas");
 
   await exec.exec("rm", ["-rf", "dist"]);
-  await exec.exec("tsc", [], { ignoreReturnCode: true });
+  await exec.exec("tsc");
 
   await exec.exec("git", ["add", "."]);
   await exec.exec("git", [

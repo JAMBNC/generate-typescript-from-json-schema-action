@@ -69,7 +69,11 @@ const addDescribes = (schema, parsed) => {
 };
 const addDefaults = (schema, parsed) => {
   if (schema.default !== undefined) {
-    parsed += `.default(${JSON.stringify(schema.default)})`;
+    const isPlainObject =
+      typeof schema.default === "object" &&
+      schema.default !== null &&
+      !Array.isArray(schema.default);
+    parsed += `.${isPlainObject ? "prefault" : "default"}(${JSON.stringify(schema.default)})`;
   }
   return parsed;
 };
